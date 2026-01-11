@@ -1,0 +1,35 @@
+    - name: Vérifier hostname
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "/system identity print"
+      register: hostname_result
+    - debug:
+        var: hostname_result.stdout
+
+    - name: Vérifier IP LAN
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "/ip address print"
+      register: ip_result
+    - debug:
+        var: ip_result.stdout
+
+    - name: Vérifier VLANs
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "/interface vlan print"
+      register: vlan_result
+    - debug:
+        var: vlan_result.stdout
+
+    - name: Vérifier bridge
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "/interface bridge print"
+      register: bridge_result
+    - debug:
+        var: bridge_result.stdout
+
+    - name: Vérifier SNMP
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "/snmp print"
+      register: snmp_result
+    - debug:
+        var: snmp_result.stdout
+
+    - name: Vérifier utilisateur test
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "/user print"
+      register: user_result
+    - debug:
+        var: user_result.stdout

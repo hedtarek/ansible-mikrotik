@@ -1,0 +1,9 @@
+---
+- name: Vérification configuration MikroTik
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - ../inventory/group_vars/all.yml
+
+  roles:
+    - mikrotik_verify

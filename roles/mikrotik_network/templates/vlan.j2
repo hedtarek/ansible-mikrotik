@@ -1,0 +1,6 @@
+{% for vlan in vlans %}
+:if ([/interface vlan find name={{ vlan.name }}] = "") do={
+  /interface vlan add name={{ vlan.name }} vlan-id={{ vlan.id }} interface={{ vlan.interface }}
+}
+{% endfor %}
+

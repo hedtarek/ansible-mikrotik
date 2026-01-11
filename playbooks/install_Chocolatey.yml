@@ -1,0 +1,8 @@
+- name: Installer Chocolatey
+  hosts: windows
+
+  tasks:
+    - name: Installer Chocolatey
+      win_chocolatey:
+        name: chocolatey
+        state: present

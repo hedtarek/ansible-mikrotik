@@ -1,0 +1,7 @@
+:if ([/snmp get enabled] = "false") do={
+  /snmp set enabled=yes
+}
+
+:if ([/snmp community find name={{ snmp_community_name }}] = "") do={
+  /snmp community add name={{ snmp_community_name }} addresses={{ snmp_allowed_hosts }} security=none
+}

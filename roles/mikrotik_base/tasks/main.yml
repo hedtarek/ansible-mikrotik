@@ -1,0 +1,19 @@
+
+- name: Configurer hostname avec condition
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ item }} "
+    :if ([/system identity get name] != \"hq-mk\") do={/system identity set name=hq-mk}"
+  loop: "{{ mikrotik_hosts }}"
+
+
+- name: Configurer DNS via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ item }} "
+    {{ lookup('template', 'dns.j2') }}"
+  loop: "{{ mikrotik_hosts }}"
+
+- name: Configurer NTP via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ item }} "
+    {{ lookup('template', 'ntp.j2') }}"
+  loop: "{{ mikrotik_hosts }}"

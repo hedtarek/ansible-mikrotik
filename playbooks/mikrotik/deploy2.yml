@@ -1,0 +1,11 @@
+- name: Déploiement MikroTik sans tmp
+  hosts: mikrotik
+  gather_facts: no
+  connection: local  # <-- exécute les commandes localement depuis Ansible
+
+  tasks:
+    - name: Configurer hostname via SSH
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no ansible@{{ inventory_hostname }} "/system identity set name={{ inventory_hostname }}"
+
+    - name: Configurer DNS via SSH
+      shell: sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no ansible@{{ inventory_hostname }} "/ip dns set servers={{ dns_servers | join(',') }} allow-remote-requests=yes"

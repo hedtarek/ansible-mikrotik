@@ -1,0 +1,25 @@
+---
+- name: Déployer un site web simple sur IIS
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+
+    - name: Créer le dossier IIS si nécessaire
+      ansible.windows.win_file:
+        path: C:\inetpub\wwwroot
+        state: directory
+
+    - name: Télécharger le fichier ansible.html
+      ansible.windows.win_get_url:
+        url: 'https://raw.githubusercontent.com/thisdavejohnson/mywebapp/master/index.html'
+        dest: 'C:\inetpub\wwwroot\ansible.html'
+
+    - name: Vérifier que le fichier a été téléchargé
+      ansible.windows.win_stat:
+        path: C:\inetpub\wwwroot\ansible.html
+      register: html_file
+
+    - name: Afficher le statut du fichier
+      ansible.builtin.debug:
+        msg: "Le fichier ansible.html existe : {{ html_file.stat.exists }}"

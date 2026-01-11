@@ -1,0 +1,10 @@
+---
+- name: Test Ansible Hello World
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Afficher un message Hello World
+      debug:
+        msg: "{{ greeting }}"
+

@@ -1,0 +1,47 @@
+- name: Configurer IP LAN
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    /ip address add address={{ item.ip }} interface={{ item.interface }}"
+  loop: "{{ lan_ip }}"
+
+# --- DNS ---
+- name: Configurer DNS via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    {{ lookup('template', 'dns.j2') }}"
+
+# --- NTP ---
+- name: Configurer NTP via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    {{ lookup('template', 'ntp.j2') }}"
+
+# --- VLAN ---
+- name: Créer VLANs via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    {{ lookup('template', 'vlan.j2') }}"
+
+# --- Bridge ---
+- name: Créer bridge via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    {{ lookup('template', 'bridge.j2') }}"
+
+# --- SNMP ---
+- name: Configurer SNMP via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    {{ lookup('template', 'snmp.j2') }}"
+
+# --- Utilisateur ---
+- name: Créer utilisateur via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    {{ lookup('template', 'user.j2') }}"
+
+# --- Backup ---
+- name: Sauvegarder config via template
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ mikrotik_hosts[0] }} "
+    /system backup save name=backup_{{ ansible_date_time.date }}.backup dont-encrypt=yes"

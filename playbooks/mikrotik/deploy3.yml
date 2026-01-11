@@ -1,0 +1,20 @@
+- name: Déploiement MikroTik via SSH direct
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    mikrotik_hosts:
+      - 10.10.10.188  # IP de mt-hq
+      # ajouter d'autres IP ici si besoin
+    ansible_user: ansible
+    ansible_ssh_pass: StrongPassword123
+    dns_servers:
+      - 8.8.8.8
+      - 1.1.1.1
+
+  tasks:
+
+    - name: Configurer hostname et DNS
+      shell: |
+        sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ item }} "/system identity set name={{ item }}; /ip dns set servers={{ dns_servers | join(',') }} allow-remote-requests=yes"
+      loop: "{{ mikrotik_hosts }}"

@@ -1,0 +1,16 @@
+---
+ - name: SNMP conf for Windows
+   hosts: windows # host group to run the module on
+   tasks:
+   -  name: Install Service
+      ansible.windows.win_feature:
+        name: SNMP-Service
+        include_management_tools: yes
+        state: present
+   -  name: Replace SNMP
+      community.windows.win_snmp:
+        community_strings:
+        - MEWO
+        permitted_managers:
+        - 192.168.100.100
+        action: set

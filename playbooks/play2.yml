@@ -1,0 +1,19 @@
+# Play2 - Application Server related tasks
+- name: Play app - Create utilisateur directories and username in app servers
+  hosts: all
+  become: yes
+  tasks:
+   - name: Create a username for utilisateur
+     user:
+       name: utilisateur
+       group: users
+       append: yes
+       home: /home/tomcat
+
+   - name: create a directory for apache tomcat
+     file:
+       path: /opt/oracle
+       owner: utilisateur
+       group: users
+       state: directory
+       mode: 0755

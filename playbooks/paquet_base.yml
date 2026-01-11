@@ -1,0 +1,14 @@
+---
+- name: Installation des paquets essentiels
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Installer les outils standards
+      apt:
+        name:
+          - vim
+          - curl
+          - wget
+          - htop
+        state: present

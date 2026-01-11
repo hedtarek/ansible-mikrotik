@@ -1,0 +1,22 @@
+---
+- name: Audit SSH
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Connexions SSH réussies
+      shell: grep "Accepted" /var/log/auth.log
+      register: ssh_ok
+      changed_when: false
+      failed_when: false
+
+    - name: Tentatives SSH échouées
+      shell: grep "Failed password" /var/log/auth.log
+      register: ssh_fail
+      changed_when: false
+      failed_when: false
+
+    - debug:
+        msg:
+          - "SSH OK: {{ ssh_ok.stdout_lines }}"
+          - "SSH FAIL: {{ ssh_fail.stdout_lines }}"

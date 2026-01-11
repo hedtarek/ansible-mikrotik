@@ -1,0 +1,7 @@
+- name: Appliquer les règles firewall
+  shell: |
+    sshpass -p "{{ ansible_ssh_pass }}" ssh -o StrictHostKeyChecking=no {{ ansible_user }}@{{ item }} "
+    {% for rule in firewall_rules %}
+    /ip firewall filter add chain={{ rule.chain }} action={{ rule.action }} {% if rule.connection_state is defined %}connection-state={{ rule.connection_state }}{% endif %};
+    {% endfor %}"
+  loop: "{{ mikrotik_hosts }}"

@@ -1,0 +1,42 @@
+- name: Déployer un site web sur Ubuntu
+  hosts: all
+  become: yes
+
+  vars:
+    site_title: "Site Ansible"
+    env_name: "production"
+
+  tasks:
+
+    - name: Installer Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: S'assurer que Apache est démarré et activé
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Créer le répertoire du site
+      file:
+        path: /var/www/html
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Déployer la page web
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Vérifier que Apache écoute sur le port 80
+      wait_for:
+        port: 80
+        timeout: 10

@@ -1,0 +1,10 @@
+---
+- name: Déploiement configuration MikroTik
+  hosts: mikrotik
+  gather_facts: no
+  connection: local
+
+  roles:
+    - mikrotik_base
+    - mikrotik_network
+    - mikrotik_firewall

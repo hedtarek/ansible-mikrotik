@@ -1,0 +1,8 @@
+- name: Gérer un service
+  hosts: windows
+
+  tasks:
+    - name: Démarrer le service Spooler
+      ansible.windows.win_service:
+        name: Spooler
+        state: started

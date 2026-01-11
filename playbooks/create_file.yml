@@ -1,0 +1,14 @@
+- name: Créer un fichier sur Windows
+  hosts: windows
+
+  tasks:
+
+    - name: Créer le dossier C:\Temp
+      ansible.windows.win_file:
+        path: C:\Temp
+        state: directory
+
+    - name: Créer un fichier texte
+      ansible.windows.win_file:
+        path: C:\Temp\test.txt
+        state: touch

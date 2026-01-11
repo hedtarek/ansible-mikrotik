@@ -1,0 +1,24 @@
+---
+- name: Monitoring système Windows
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+    - name: Vérifier l'utilisation du disque C:
+      ansible.windows.win_shell: Get-PSDrive -Name C | Select-Object Used,Free,Name | ConvertTo-Json
+      register: disk_info
+
+    - name: Vérifier la mémoire disponible
+      ansible.windows.win_shell: Get-WmiObject Win32_OperatingSystem | Select-Object TotalVisibleMemorySize,FreePhysicalMemory | ConvertTo-Json
+      register: mem_info
+
+    - name: Vérifier l'utilisation CPU
+      ansible.windows.win_shell: Get-WmiObject Win32_Processor | Select-Object Name,LoadPercentage | ConvertTo-Json
+      register: cpu_info
+
+    - name: Afficher le rapport système
+      ansible.builtin.debug:
+        msg:
+          - "Disque C: {{ disk_info.stdout }}"
+          - "Mémoire : {{ mem_info.stdout }}"
+          - "CPU : {{ cpu_info.stdout }}"

@@ -1,0 +1,11 @@
+- name: Gestion utilisateur Windows
+  hosts: windows
+
+  tasks:
+    - name: Créer utilisateur local
+      ansible.windows.win_user:
+        name: devuser
+        password: P@ssw0rd123!
+        state: present
+        groups:
+          - Administrateurs

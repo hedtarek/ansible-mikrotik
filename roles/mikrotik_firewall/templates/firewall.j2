@@ -1,0 +1,8 @@
+/ip firewall filter
+add chain=input connection-state=established,related action=accept comment="Allow established"
+add chain=input protocol=icmp action=accept comment="Allow ICMP"
+
+{% if firewall_policy == "strict" %}
+add chain=input in-interface={{ lan_interface }} action=accept comment="LAN access"
+add chain=input action=drop comment="Drop all"
+{% endif %}

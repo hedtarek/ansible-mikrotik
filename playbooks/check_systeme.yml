@@ -1,0 +1,20 @@
+---
+- name: Analyse CPU et mémoire par utilisateur
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Top CPU par utilisateur
+      shell: ps -eo user,%cpu --sort=-%cpu | head -10
+      register: cpu_usage
+      changed_when: false
+
+    - name: Top mémoire par utilisateur
+      shell: ps -eo user,%mem --sort=-%mem | head -10
+      register: mem_usage
+      changed_when: false
+
+    - debug:
+        msg:
+          - "CPU: {{ cpu_usage.stdout_lines }}"
+          - "MEM: {{ mem_usage.stdout_lines }}"

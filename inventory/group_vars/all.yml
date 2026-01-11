@@ -1,0 +1,64 @@
+mikrotik_hosts:
+  - 10.10.10.188
+
+ansible_user: ansible
+ansible_ssh_pass: StrongPassword123
+
+dns_servers:
+  - 8.8.8.8
+  - 1.1.1.1
+
+ntp_servers:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+
+lan_ip:
+  - { ip: "192.168.1.1/24", interface: "ether3" }
+
+
+firewall_rules:
+
+  - chain: input
+    action: accept
+    connection_state: established,related
+
+  - chain: input
+    action: accept
+    protocol: tcp
+    dst-port: 22
+
+  - chain: input
+    action: accept
+    protocol: tcp
+    dst-port: 80,443
+
+  - chain: input
+    action: drop
+
+
+# VLAN
+vlans:
+  - name: vlan10
+    id: 10
+    interface: ether4
+
+  - name: vlan20
+    id: 20
+    interface: ether3
+
+# Bridge
+bridge_name: br0
+bridge_interfaces:
+  - ether3
+  - ether4
+
+# SNMP
+snmp_community_name: mewo
+snmp_allowed_hosts: 10.10.10.0/24
+
+# User
+new_user: playbook
+new_user_pass: Test1234
+
+# Backup
+backup_name: backup_{{ ansible_date_time.date }}.backup

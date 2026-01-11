@@ -1,0 +1,9 @@
+:if ([/interface bridge find name={{ bridge_name }}] = "") do={
+  /interface bridge add name={{ bridge_name }}
+}
+
+{% for intf in bridge_interfaces %}
+:if ([/interface bridge port find interface={{ intf }}] = "") do={
+  /interface bridge port add bridge={{ bridge_name }} interface={{ intf }}
+}
+{% endfor %}

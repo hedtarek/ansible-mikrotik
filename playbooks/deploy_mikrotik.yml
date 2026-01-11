@@ -1,0 +1,11 @@
+---
+- name: Déploiement complet MikroTik
+  hosts: localhost
+  gather_facts: yes
+  vars_files:
+    - ../inventory/group_vars/all.yml
+
+  roles:
+    - mikrotik_base
+    - mikrotik_network
+    - mikrotik_firewall

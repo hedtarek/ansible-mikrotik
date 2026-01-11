@@ -1,0 +1,25 @@
+---
+# Play1 - WebServer related tasks
+- name: Play Web - Create apache directories and username in web servers
+  hosts: all
+  become: yes
+  tasks:
+      - name: Create group
+        group:
+          name: users
+          state: present
+      - name: Create group
+        group:
+          name: admin
+          state: present
+      - name: create username apacheadm
+        user:
+          name: apacheadm
+          groups: users,admin
+          append: yes
+          home: /home/apacheadm
+
+      - name: install apache2
+        apt:
+          name: apache2
+          state: latest

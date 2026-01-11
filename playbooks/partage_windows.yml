@@ -1,0 +1,28 @@
+---
+- name: Créer un partage Windows
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+    - name: Créer le dossier partagé
+      ansible.windows.win_file:
+        path: C:\Share\Docs
+        state: directory
+
+    - name: Créer le partage réseau
+      ansible.windows.win_share:
+        name: Docs
+        path: C:\Share\Docs
+        description: "Partage géré par Ansible"
+        read_only: no
+        full_access:
+          - Administrateurs
+          - 'DOMAIN\Users'
+
+    - name: Vérifier le partage
+      ansible.windows.win_shell: net share
+      register: share_info
+
+    - name: Afficher le partage
+      ansible.builtin.debug:
+        msg: "{{ share_info.stdout_lines }}"

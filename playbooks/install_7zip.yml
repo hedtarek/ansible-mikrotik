@@ -1,0 +1,21 @@
+---
+- name: Installer 7zip sur Windows
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+
+    - name: Vérifier version Windows
+      ansible.windows.win_shell: systeminfo | findstr /B "OS Version"
+      register: win_ver
+
+    - name: Installer Chocolatey adapté à la version Windows
+      win_chocolatey:
+        name: chocolatey
+        version: "{{ '1.2.0' if '6.3' in win_ver.stdout else 'latest' }}"
+        state: present
+
+    - name: Installer 7zip via Chocolatey
+      win_chocolatey:
+        name: 7zip
+        state: present

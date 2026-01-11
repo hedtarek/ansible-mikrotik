@@ -1,0 +1,33 @@
+---
+- name: Affichage consolidé des utilisateurs créés
+  hosts: all
+  become: yes
+  vars:
+    users:
+      - alice
+      - bob
+      - charlie
+
+  tasks:
+    - name: Créer les utilisateurs
+      user:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ users }}"
+
+    - name: Extraire les utilisateurs depuis /etc/passwd
+      shell: |
+        awk -F: '$1=="alice" || $1=="bob" || $1=="charlie"' /etc/passwd
+      register: passwd_output
+      changed_when: false
+
+    - name: Afficher le résultat
+      debug:
+        msg: "{{ passwd_output.stdout_lines }}"
+
+# awk :
+# -F:          → définit ':' comme séparateur de champs (format /etc/passwd)
+# $1           → correspond au nom d'utilisateur (1er champ)
+# $1=="alice" || $1=="bob" || $1=="charlie"
+#              → filtre uniquement les lignes des utilisateurs ciblés
+# /etc/passwd  → fichier système contenant les comptes utilisateurs

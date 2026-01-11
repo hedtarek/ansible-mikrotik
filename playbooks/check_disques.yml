@@ -1,0 +1,23 @@
+---
+- name: Audit disque et permissions dangereuses
+  hosts: all
+  become: yes
+
+  tasks:
+    # Vérification occupation disque
+    - name: Vérifier partitions > 80%
+      shell: df -h | awk '$5+0 > 80 { print $0 }'
+      register: disk_alert
+      changed_when: false
+
+    - debug:
+        msg: "Partitions critiques: {{ disk_alert.stdout_lines }}"
+
+    # Fichiers SUID / SGID
+    - name: Fichiers SUID/SGID
+      shell: find / -perm /6000 -type f 2>/dev/null
+      register: suid_files
+      changed_when: false
+
+    - debug:
+        msg: "Fichiers SUID/SGID: {{ suid_files.stdout_lines }}"
